@@ -20,8 +20,8 @@ const useCollections = () => {
 
   const languages = createListCollection({
     items: [
+      { label: "ไทย", value: "th" },
       { label: "English", value: "en" },
-      { label: "中文", value: "zh" },
     ],
   });
 

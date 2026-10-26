@@ -136,11 +136,12 @@
     "connected": "Connected",
     "connecting": "Connecting",
     "clickToReconnect": "Click to Reconnect",
-    "localReady": "Local AI ready",
-    "ready": "Ready",
+    "ready": "READY",
     "offline": "Offline · tap to reconnect"
   },
   "header": {
+    "switchLanguage": "เปลี่ยนเป็นภาษาไทย",
+    "switchLanguageShort": "ไทย",
     "settings": "Settings",
     "history": "Conversation history",
     "newConversation": "New conversation",
@@ -155,7 +156,7 @@
     "toThai": "Thai translation",
     "toPattani": "Pattani Malay translation",
     "emptyTitle": "No messages yet",
-    "emptyHint": "Turn on the microphone and speak, or type a sentence below."
+    "emptyHint": "Turn on the microphone and speak, type a sentence below, or tap a most-used phrase."
   },
   "composer": {
     "micOn": "Turn microphone off",
@@ -171,5 +172,17 @@
   },
   "safety": {
     "notice": "Prototype for basic communication only. Must not replace a medical diagnosis."
+  },
+  "quick": {
+    "title": "Most used",
+    "direction": "Phrase direction",
+    "t2p": "Thai → Pattani",
+    "p2t": "Pattani → Thai",
+    "bank": "Phrase bank",
+    "confirmTitle": "Check before speaking",
+    "confirmBody": "This phrase has a number or a length of time. Check that it is right before it is spoken.",
+    "confirmSpeak": "Confirm and speak",
+    "speakFailed": "Couldn't play the phrase",
+    "speakFailedHint": "The text is in the chat. Check that the yawidoc server is running."
   }
 } 

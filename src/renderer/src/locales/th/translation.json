@@ -1,0 +1,188 @@
+{
+  "common": {
+    "save": "บันทึก",
+    "cancel": "ยกเลิก",
+    "settings": "ตั้งค่า",
+    "close": "ปิด",
+    "accept": "ตกลง"
+  },
+  "settings": {
+    "tabs": {
+      "general": "ทั่วไป",
+      "live2d": "อวาตาร์",
+      "asr": "การฟังเสียง",
+      "tts": "เสียงพูด",
+      "agent": "ผู้ช่วย",
+      "about": "เกี่ยวกับ"
+    },
+    "general": {
+      "language": "ภาษา",
+      "useCameraBackground": "ใช้กล้องเป็นพื้นหลัง",
+      "showSubtitle": "แสดงคำบรรยาย",
+      "backgroundImage": "ภาพพื้นหลัง",
+      "customBgUrlPlaceholder": "ใส่ลิงก์รูปภาพ",
+      "customBgUrl": "หรือใส่ลิงก์ภาพพื้นหลังเอง",
+      "characterPreset": "ตัวละคร / ทิศทางการแปล",
+      "wsUrl": "WebSocket URL",
+      "baseUrl": "Base URL",
+      "imageCompressionQuality": "คุณภาพการบีบอัดภาพ",
+      "imageCompressionQualityPlaceholder": "ใส่คุณภาพการบีบอัด (0-100)",
+      "imageCompressionQualityHelp": "คุณภาพการบีบอัด JPEG (0.1-1.0) ค่าเริ่มต้น 0.8 เพื่อลดขนาดไฟล์เมื่อส่งภาพไปยังโมเดล AI",
+      "imageMaxWidth": "ความกว้างภาพสูงสุด",
+      "imageMaxWidthPlaceholder": "ใส่ความกว้างสูงสุดเป็นพิกเซล",
+      "imageMaxWidthHelp": "ภาพที่กว้างกว่าค่านี้จะถูกย่อตามสัดส่วน ใส่ 0 เพื่อไม่จำกัดขนาด"
+    },
+    "live2d": {
+      "pointerInteractive": "ตอบสนองต่อเมาส์",
+      "scrollToResize": "เลื่อนลูกกลิ้งเพื่อปรับขนาด"
+    },
+    "asr": {
+      "autoStopMic": "ปิดไมค์อัตโนมัติเมื่อระบบเริ่มพูด",
+      "autoStopMicDesc": "ปิดไมโครโฟนเมื่อระบบเริ่มพูด เพื่อไม่ให้รับเสียงของตัวเองกลับเข้ามา",
+      "autoStartMicOnConvEnd": "เปิดไมค์อัตโนมัติเมื่อพูดจบ",
+      "autoStartMicOnConvEndDesc": "เปิดไมโครโฟนอีกครั้งเมื่อระบบพูดจบ เพื่อสนทนาต่อได้ทันที",
+      "autoStartMicOn": "เปิดไมค์อัตโนมัติเมื่อหยุดการพูด",
+      "autoStartMicOnDesc": "เปิดไมโครโฟนอีกครั้งเมื่อกดหยุดระบบกลางคัน",
+      "positiveSpeechThreshold": "เกณฑ์ตรวจจับเสียงพูด",
+      "positiveSpeechThresholdDesc": "ความมั่นใจขั้นต่ำ (1-100) ที่ถือว่าเป็นเสียงพูด ค่าสูงช่วยลดการจับเสียงผิด",
+      "negativeSpeechThreshold": "เกณฑ์หยุดตรวจจับ",
+      "negativeSpeechThresholdDesc": "ความมั่นใจ (0-100) ที่ต่ำกว่านี้จะถือว่าหยุดพูด ค่าต่ำทำให้ไวน้อยลง",
+      "redemptionFrames": "จำนวนเฟรมยืนยัน",
+      "redemptionFramesDesc": "จำนวนเฟรมต่อเนื่อง (1-100) ที่ใช้ยืนยันว่าเป็นเสียงพูด ค่าสูงช่วยลดเสียงรบกวน"
+    },
+    "agent": {
+      "allowProactiveSpeak": "ให้ระบบพูดก่อนได้",
+      "idleSecondsToSpeak": "จำนวนวินาทีที่เงียบก่อนระบบพูด",
+      "allowButtonTrigger": "ให้ปุ่มยกมือสั่งให้ระบบพูด"
+    },
+    "about": {
+      "title": "yawidoc (พัฒนาต่อจาก Open LLM VTuber)",
+      "version": "เวอร์ชัน",
+      "projectLinks": "ลิงก์โครงการ",
+      "github": "GitHub",
+      "documentation": "เอกสาร",
+      "license": "สัญญาอนุญาต",
+      "copyright": "ลิขสิทธิ์",
+      "viewLicense": "ดูสัญญาอนุญาต"
+    }
+  },
+  "footer": {
+    "typeYourMessage": "พิมพ์ประโยค…",
+    "cameraControl": "แตะเพื่อเปิดกล้อง",
+    "cameraStopping": "แตะเพื่อปิดกล้อง",
+    "screenControl": "แตะเพื่อแชร์หน้าจอ",
+    "screenStopping": "แตะเพื่อหยุดแชร์หน้าจอ"
+  },
+  "sidebar": {
+    "camera": "กล้อง",
+    "screen": "หน้าจอ",
+    "browser": "เบราว์เซอร์",
+    "live": "สด",
+    "noMessages": "ยังไม่มีข้อความ",
+    "noBrowserSession": "ไม่มีเบราว์เซอร์ที่เปิดอยู่",
+    "browserSession": "เบราว์เซอร์"
+  },
+  "group": {
+    "management": "จัดการกลุ่ม",
+    "yourUuid": "UUID ของคุณ",
+    "inviteMember": "เชิญสมาชิก",
+    "enterMemberUuid": "ใส่ UUID ของสมาชิก",
+    "invite": "เชิญ",
+    "members": "สมาชิก",
+    "you": "คุณ",
+    "leaveGroup": "ออกจากกลุ่ม",
+    "removeMember": "นำสมาชิกออก",
+    "leave": "ออก"
+  },
+  "history": {
+    "chatHistoryList": "ประวัติการสนทนา",
+    "noMessages": "ไม่มีข้อความ"
+  },
+  "notification": {
+    "characterLoaded": "โหลดตัวละครแล้ว",
+    "characterSwitched": "เปลี่ยนตัวละครแล้ว",
+    "historyLoaded": "โหลดประวัติแล้ว",
+    "newConversation": "เริ่มการสนทนาใหม่แล้ว",
+    "newChatHistory": "สร้างประวัติการสนทนาใหม่แล้ว",
+    "historyDeleteSuccess": "ลบประวัติแล้ว",
+    "historyDeleteFail": "ลบประวัติไม่สำเร็จ"
+  },
+  "error": {
+    "cameraApiNotSupported": "อุปกรณ์นี้ไม่รองรับกล้อง",
+    "noCameraFound": "ไม่พบกล้องในอุปกรณ์นี้",
+    "failedStartCamera": "เปิดกล้องไม่สำเร็จ",
+    "failedStartBackgroundCamera": "เปิดกล้องพื้นหลังไม่สำเร็จ",
+    "failedStartScreenCapture": "แชร์หน้าจอไม่สำเร็จ",
+    "failedStartVAD": "เปิดระบบตรวจจับเสียงพูดไม่สำเร็จ",
+    "llmCantHear": "ระบบไม่ได้ยินเสียงของคุณ",
+    "audioPlayback": "เล่นเสียงไม่สำเร็จ",
+    "enterValidUuid": "กรุณาใส่ UUID ที่ถูกต้อง",
+    "cannotDeleteCurrentHistory": "ลบการสนทนาที่เปิดอยู่ไม่ได้",
+    "failedCapture": "จับภาพจาก{{source}}ไม่สำเร็จ",
+    "failedParseWebSocket": "อ่านข้อความจากเซิร์ฟเวอร์ไม่สำเร็จ",
+    "websocketNotOpen": "ยังไม่ได้เชื่อมต่อเซิร์ฟเวอร์",
+    "vadMisfire": "ได้ยินเสียงแต่สั้นเกินไป ลองพูดให้ดังหรือยาวขึ้น หรือปรับค่าในหน้าตั้งค่า (ลดเกณฑ์ตรวจจับเสียงพูด ลดเกณฑ์หยุดตรวจจับ ลดจำนวนเฟรมยืนยัน)"
+  },
+  "aiState": {
+    "idle": "พร้อม",
+    "thinking-speaking": "กำลังแปล…",
+    "interrupted": "หยุดแล้ว",
+    "loading": "กำลังโหลด…",
+    "listening": "กำลังฟัง…",
+    "waiting": "รอเสียงพูด…",
+    "speaking": "กำลังพูด…"
+  },
+  "wsStatus": {
+    "connected": "เชื่อมต่อแล้ว",
+    "connecting": "กำลังเชื่อมต่อ",
+    "clickToReconnect": "แตะเพื่อเชื่อมต่อใหม่",
+    "ready": "พร้อม",
+    "offline": "ออฟไลน์ · แตะเพื่อเชื่อมต่อใหม่"
+  },
+  "header": {
+    "switchLanguage": "Switch to English",
+    "switchLanguageShort": "EN",
+    "settings": "ตั้งค่า",
+    "history": "ประวัติการสนทนา",
+    "newConversation": "เริ่มการสนทนาใหม่",
+    "group": "กลุ่ม",
+    "mode": "รูปแบบการแสดงผล"
+  },
+  "conversation": {
+    "label": "การสนทนา",
+    "patientSpeech": "ผู้ป่วย · ภาษามลายูปัตตานี",
+    "doctorSpeech": "แพทย์ · ภาษาไทย",
+    "you": "คุณ",
+    "toThai": "คำแปลภาษาไทย",
+    "toPattani": "คำแปลภาษามลายูปัตตานี",
+    "emptyTitle": "ยังไม่มีข้อความ",
+    "emptyHint": "เปิดไมโครโฟนแล้วพูด หรือพิมพ์ประโยคด้านล่าง หรือแตะประโยคที่ใช้บ่อย"
+  },
+  "composer": {
+    "micOn": "ปิดไมโครโฟน",
+    "micOff": "เปิดไมโครโฟน",
+    "stop": "หยุดการพูดตอนนี้",
+    "send": "ส่ง",
+    "inputLabel": "พิมพ์ประโยคที่ต้องการแปล"
+  },
+  "vtuber": {
+    "label": "อวาตาร์ล่าม",
+    "shrink": "ย่ออวาตาร์",
+    "expand": "แสดงอวาตาร์"
+  },
+  "safety": {
+    "notice": "ระบบต้นแบบเพื่อการสื่อสารเบื้องต้น ห้ามใช้ทดแทนการวินิจฉัยทางการแพทย์"
+  },
+  "quick": {
+    "title": "ใช้บ่อย",
+    "direction": "ทิศทางประโยค",
+    "t2p": "ไทย → ปัตตานี",
+    "p2t": "ปัตตานี → ไทย",
+    "bank": "คลังประโยค",
+    "confirmTitle": "ตรวจสอบก่อนพูด",
+    "confirmBody": "ประโยคนี้มีตัวเลขหรือระยะเวลา กรุณาตรวจสอบให้ถูกต้องก่อนเล่นเสียง",
+    "confirmSpeak": "ยืนยันและพูด",
+    "speakFailed": "เล่นเสียงประโยคไม่ได้",
+    "speakFailedHint": "ข้อความแสดงในแชตแล้ว กรุณาตรวจสอบว่าเซิร์ฟเวอร์ yawidoc ทำงานอยู่"
+  }
+}

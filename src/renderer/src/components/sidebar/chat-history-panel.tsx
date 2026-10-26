@@ -20,12 +20,12 @@ const LABEL_KEYS = {
   chat: { source: 'conversation.you', translation: null },
 } as const;
 
-/** "14:05" from the message's ISO timestamp */
-function clockTime(timestamp: string | null | undefined): string {
+/** "14:05" from the message's ISO timestamp, in the UI language's clock style */
+function clockTime(timestamp: string | null | undefined, language: string): string {
   if (!timestamp) return '';
   const date = new Date(timestamp);
   if (Number.isNaN(date.getTime())) return '';
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  return date.toLocaleTimeString(language, { hour: '2-digit', minute: '2-digit' });
 }
 
 /**
@@ -33,7 +33,7 @@ function clockTime(timestamp: string | null | undefined): string {
  * The newest translation is set large so it can be read from across the desk.
  */
 function ChatHistoryPanel(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { messages } = useChatHistory();
   const { confName } = useConfig();
   const { baseUrl } = useWebSocket();
@@ -66,8 +66,8 @@ function ChatHistoryPanel(): JSX.Element {
     }
   }, [validMessages.length, lastContent]);
 
-  const labels = LABEL_KEYS[direction];
   const aiName = (name?: string) => name || confName || 'AI';
+  const phraseTag = <span className="yd-tag">{t('quick.bank')}</span>;
 
   return (
     <div ref={listRef} className="yd-chat" data-direction={direction} role="log" aria-live="polite">
@@ -97,13 +97,19 @@ function ChatHistoryPanel(): JSX.Element {
           );
         }
 
+        // Quick phrases carry their own direction; everything else follows the character
+        const msgDirection = msg.direction ?? direction;
+        const labels = LABEL_KEYS[msgDirection];
+        const fromBank = msg.origin === 'phrasebook';
+
         if (msg.role === 'human') {
           return (
-            <div key={msg.id} className="yd-msg yd-msg--source">
+            <div key={msg.id} className="yd-msg yd-msg--source" data-direction={msgDirection}>
               <div className="yd-msg__label">
                 <PiWaveform aria-hidden />
                 <span>{t(labels.source)}</span>
-                <time className="yd-msg__time">{clockTime(msg.timestamp)}</time>
+                {fromBank && phraseTag}
+                <time className="yd-msg__time">{clockTime(msg.timestamp, i18n.language)}</time>
               </div>
               <p className="yd-msg__text" style={{ margin: 0 }}>{msg.content}</p>
             </div>
@@ -128,13 +134,18 @@ function ChatHistoryPanel(): JSX.Element {
         }
 
         return (
-          <div key={msg.id} className={isLatest ? 'yd-msg yd-msg--translation yd-msg--latest' : 'yd-msg yd-msg--translation'}>
+          <div
+            key={msg.id}
+            className={isLatest ? 'yd-msg yd-msg--translation yd-msg--latest' : 'yd-msg yd-msg--translation'}
+            data-direction={msgDirection}
+          >
             <div className="yd-msg__avatar">{avatar}</div>
             <div className="yd-card">
               <div className="yd-msg__label">
                 <PiTranslate aria-hidden />
                 <span>{labels.translation ? t(labels.translation) : aiName(msg.name)}</span>
-                <time className="yd-msg__time">{clockTime(msg.timestamp)}</time>
+                {fromBank && phraseTag}
+                <time className="yd-msg__time">{clockTime(msg.timestamp, i18n.language)}</time>
               </div>
               <p className="yd-msg__text" style={{ margin: 0 }}>{msg.content}</p>
             </div>

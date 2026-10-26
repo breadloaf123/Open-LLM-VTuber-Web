@@ -12,6 +12,8 @@
   --yd-emerald-ink: #12735F;     /* emerald dark enough for small text (5:1+) */
   --yd-emerald-soft: #E8F5F2;
   --yd-terracotta: #F4A261;
+  --yd-terracotta-soft: #FDF3EB;
+  --yd-terracotta-ink: #8A4513;   /* chip text: terracotta itself is too light to read */
   --yd-coral: #E07A5F;
   --yd-safety: #E76F51;
   --yd-safety-bg: #FDF0ED;
@@ -52,6 +54,8 @@
   --yd-emerald-ink: #5DD8B8;
   --yd-emerald-soft: rgba(60, 201, 166, 0.14);
   --yd-terracotta: #F4A261;
+  --yd-terracotta-soft: rgba(244, 162, 97, 0.12);
+  --yd-terracotta-ink: #F6BD8F;
   --yd-coral: #F0957C;
   --yd-safety: #F0957C;
   --yd-safety-bg: rgba(231, 111, 81, 0.12);
@@ -141,7 +145,6 @@
 .yd-brand__word { height: 24px; width: auto; display: block; }
 
 .yd-only-dark { display: none !important; }
-.yd-phone-only { display: none !important; }
 :root.dark .yd-only-light { display: none !important; }
 :root.dark .yd-only-dark { display: block !important; }
 
@@ -311,10 +314,22 @@
   line-height: 1.35;
 }
 
-.yd-chat[data-direction="patient"] { --yd-accent: var(--yd-emerald); }
-.yd-chat[data-direction="doctor"] { --yd-accent: var(--yd-teal); }
-.yd-chat[data-direction="patient"] .yd-msg--source .yd-msg__label svg { color: var(--yd-emerald-ink); }
-.yd-chat[data-direction="doctor"] .yd-msg--source .yd-msg__label svg { color: var(--yd-teal); }
+/* Direction colours: per message, since quick phrases can go either way */
+.yd-msg[data-direction="patient"] { --yd-accent: var(--yd-emerald); }
+.yd-msg[data-direction="doctor"] { --yd-accent: var(--yd-teal); }
+.yd-msg[data-direction="patient"].yd-msg--source .yd-msg__label svg { color: var(--yd-emerald-ink); }
+.yd-msg[data-direction="doctor"].yd-msg--source .yd-msg__label svg { color: var(--yd-teal); }
+
+/* Marks text spoken from the phrase bank rather than machine-translated */
+.yd-tag {
+  padding: 1px 8px;
+  border-radius: 999px;
+  background: var(--yd-terracotta-soft);
+  color: var(--yd-terracotta-ink);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
 
 .yd-tool {
   align-self: center;
@@ -339,6 +354,188 @@
 .yd-empty img { height: 72px; width: auto; opacity: 0.9; }
 .yd-empty__title { font-size: 20px; font-weight: 600; color: var(--yd-text); text-wrap: balance; }
 .yd-empty__hint { font-size: 16px; line-height: 1.6; }
+
+/* ---------- Quick phrases ("most used") ---------- */
+
+.yd-quick {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+.yd-quick__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.yd-quick__title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--yd-text);
+}
+
+.yd-segmented {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--yd-surface-elevated);
+  border: 1px solid var(--yd-border);
+}
+
+.yd-segmented__option {
+  min-height: 36px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--yd-text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 150ms var(--yd-ease), color 150ms var(--yd-ease);
+}
+
+.yd-segmented__option[aria-checked="true"] {
+  background: var(--yd-surface);
+  color: var(--yd-teal);
+  font-weight: 600;
+  box-shadow: var(--yd-shadow-card);
+}
+
+/* One scrolling row of chips, so the conversation keeps its height */
+.yd-quick__list {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 2px 2px 6px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--yd-border) transparent;
+}
+
+.yd-quick__list li { flex: none; scroll-snap-align: start; }
+
+.yd-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-height: 52px;
+  max-width: 260px;
+  padding: 7px 16px;
+  border: 1px solid var(--yd-terracotta);
+  border-radius: var(--yd-radius);
+  background: var(--yd-terracotta-soft);
+  color: var(--yd-terracotta-ink);
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: background-color 150ms var(--yd-ease), transform 150ms var(--yd-ease);
+}
+
+.yd-chip:hover { background: color-mix(in srgb, var(--yd-terracotta) 22%, var(--yd-surface)); }
+.yd-chip:active { transform: scale(0.97); }
+
+.yd-chip__said {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.yd-chip__spoken {
+  font-size: 13px;
+  line-height: 1.3;
+  color: var(--yd-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ---------- Confirmation dialog (numbers, doses, times) ---------- */
+
+.yd-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(11, 23, 28, 0.55);
+}
+
+.yd-dialog {
+  width: min(440px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 22px;
+  border-radius: var(--yd-radius-lg);
+  border: 2px solid var(--yd-coral);
+  background: var(--yd-surface);
+  color: var(--yd-text);
+  box-shadow: var(--yd-shadow-raised);
+  font-family: var(--yd-font);
+}
+
+.yd-dialog__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.yd-dialog__title svg { color: var(--yd-coral); font-size: 24px; flex: none; }
+.yd-dialog__body { margin: 0; font-size: 16px; line-height: 1.6; color: var(--yd-text-secondary); }
+
+.yd-dialog__phrase {
+  padding: 12px 16px;
+  border-radius: var(--yd-radius-sm);
+  background: var(--yd-safety-bg);
+}
+
+.yd-dialog__phrase p { margin: 0; }
+.yd-dialog__said { font-size: 16px; color: var(--yd-text-secondary); }
+.yd-dialog__spoken { font-size: 26px; font-weight: 700; line-height: 1.35; }
+
+.yd-dialog__actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+
+.yd-btn {
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: var(--yd-radius-sm);
+  font: 600 16px/1 var(--yd-font);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.yd-btn--quiet { border: 1px solid var(--yd-border); background: var(--yd-surface-elevated); color: var(--yd-text); }
+.yd-btn--confirm { border: 0; background: var(--yd-teal); color: var(--yd-surface); }
+.yd-btn:focus-visible { outline: 3px solid var(--yd-focus); outline-offset: 2px; }
+
+/* Header language switch: shows the language it switches to */
+.yd-lang-btn {
+  width: auto;
+  min-width: 44px;
+  padding-inline: 10px;
+  font-size: 15px;
+  font-weight: 600;
+}
 
 /* ---------- Composer ---------- */
 
@@ -614,7 +811,6 @@
   .yd-header { gap: 10px; padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(4px, env(safe-area-inset-right, 0px)); }
   .yd-brand__mark { height: 36px; }
   .yd-character, .yd-desktop-only { display: none !important; }
-  .yd-phone-only { display: inline !important; }
 
   .yd-main { display: flex; flex-direction: column; }
   .yd-conversation { flex: 1; padding-inline: 12px; }
@@ -630,6 +826,11 @@
   .yd-card .yd-msg__text { font-size: 18px; }
   .yd-msg--source .yd-msg__text { font-size: 16px; }
   .yd-msg__avatar { width: 36px; height: 36px; }
+
+  .yd-quick { padding-bottom: 8px; gap: 6px; }
+  .yd-quick__title { font-size: 14px; }
+  .yd-segmented__option { min-height: 32px; padding: 0 10px; font-size: 13px; }
+  .yd-chip { min-height: 48px; padding: 6px 12px; }
 
   .yd-composer { margin-bottom: 10px; padding: 10px 12px 12px; gap: 8px; border-radius: var(--yd-radius); }
   .yd-composer__row { gap: 8px; }

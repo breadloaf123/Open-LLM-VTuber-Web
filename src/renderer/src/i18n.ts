@@ -3,9 +3,9 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// Import translation resources
+// Import translation resources. yawidoc offers Thai (default) and English.
+import thTranslation from "./locales/th/translation.json";
 import enTranslation from "./locales/en/translation.json";
-import zhTranslation from "./locales/zh/translation.json";
 
 // Configure i18next instance
 i18n
@@ -15,8 +15,10 @@ i18n
   .use(initReactI18next)
   // Initialize i18next
   .init({
-    // Default language when detection fails
-    fallbackLng: "en",
+    // Thai unless the user has picked English on this device
+    fallbackLng: "th",
+    supportedLngs: ["th", "en"],
+    load: "languageOnly",
     // Debug mode for development
     debug: process.env.NODE_ENV === "development",
     // Namespaces configuration
@@ -24,17 +26,17 @@ i18n
     ns: ["translation"],
     // Resources containing translations
     resources: {
+      th: {
+        translation: thTranslation,
+      },
       en: {
         translation: enTranslation,
-      },
-      zh: {
-        translation: zhTranslation,
       },
     },
     // Language detection options
     detection: {
-      // Order and from where user language should be detected
-      order: ["localStorage", "navigator"],
+      // Only a saved choice counts; the browser's language doesn't, so new devices start in Thai
+      order: ["localStorage"],
       // Cache user language detection
       caches: ["localStorage"],
       // HTML attribute with which to set language
@@ -52,9 +54,14 @@ i18n
 
 // Save language change to localStorage
 i18n.on("languageChanged", (lng) => {
-  localStorage.setItem("i18nextLng", lng);
+  try {
+    localStorage.setItem("i18nextLng", lng);
+  } catch {
+    // Storage can be blocked; the choice then lasts until the page reloads
+  }
   // Update HTML document lang attribute
   document.documentElement.lang = lng;
 });
+document.documentElement.lang = i18n.resolvedLanguage || "th";
 
 export default i18n;

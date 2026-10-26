@@ -1,0 +1,152 @@
+{
+  "_about": "Starter quick phrases, copied word for word from the interview transcripts (pattani_dataset/pairs.jsonl, commit f81c7c0). Pattani Malay is written in Thai script. Review with a Pattani speaker before clinical use; replace with the main-PC phrase bank when available. Set \"confirm\": true on any phrase with a number, dose or frequency.",
+  "thaiToPattani": [
+    {
+      "id": "t2p-01",
+      "thai": "เมาะเป็นอะไรมาคะ",
+      "pattani": "เมาะยาดีกาปอนิมารี",
+      "source": "pairs.jsonl row 88"
+    },
+    {
+      "id": "t2p-02",
+      "thai": "เมาะเป็นมานานแค่ไหนแล้วคะ",
+      "pattani": "เมาะยาดีนิลามอมานอเดาะห์",
+      "source": "pairs.jsonl row 236"
+    },
+    {
+      "id": "t2p-03",
+      "thai": "เมาะมีรู้สึกปวดหัวมั้ยคะ",
+      "pattani": "เมาะอาดอวาซอซาเกะปาลอเดาะนิ",
+      "source": "pairs.jsonl row 185"
+    },
+    {
+      "id": "t2p-04",
+      "thai": "มีปวดท้องมั้ยคะ",
+      "pattani": "อาดอซาเกะปือโระเดาะปวดท้อง",
+      "source": "pairs.jsonl row 188"
+    },
+    {
+      "id": "t2p-05",
+      "thai": "มีไข้แบบนี้ มีมั้ย",
+      "pattani": "อาดอดือแมแบบนี้ อาดอเดาะ",
+      "source": "pairs.jsonl row 195"
+    },
+    {
+      "id": "t2p-06",
+      "thai": "แล้วมีแบบไอมีมั้ยคะ",
+      "pattani": "ปาตูอาดอแบบบาโตะอาดอเดาะ",
+      "source": "pairs.jsonl row 207"
+    },
+    {
+      "id": "t2p-07",
+      "thai": "แล้วมีหายใจไม่สะดวกบ้างมั้ยคะ",
+      "pattani": "ปาตูอาดอยาวอแบบเดาะซือดะเดาะ",
+      "source": "pairs.jsonl row 213"
+    },
+    {
+      "id": "t2p-08",
+      "thai": "แล้วเจ็บหน้าอกแบบนี้มีมั้ย",
+      "pattani": "ปาตูซาเกะดาดอแบบนี้อาดอเดาะ",
+      "source": "pairs.jsonl row 137"
+    },
+    {
+      "id": "t2p-09",
+      "thai": "แล้วรู้สึกอยากอ้วกแบบนี้มั้ยคะ",
+      "pattani": "ปาตูวาสอแบบเนาะเนาะมูเตาะห์แบบนี้เดาะ",
+      "source": "pairs.jsonl row 110"
+    },
+    {
+      "id": "t2p-10",
+      "thai": "เมาะมีแพ้ยาอะไรมั้ยคะ",
+      "pattani": "เมาะอาดออาเลาะห์แฮฮูบะมานอเดาะ",
+      "source": "pairs.jsonl row 243"
+    },
+    {
+      "id": "t2p-11",
+      "thai": "อายุเท่าไหร่แล้วคะ",
+      "pattani": "ออมอวาปอเดาะห์",
+      "source": "pairs.jsonl row 267"
+    },
+    {
+      "id": "t2p-12",
+      "thai": "บ้านอยู่ที่ไหนคะ",
+      "pattani": "รูเมาะห์โดะมานอ",
+      "source": "pairs.jsonl row 161"
+    }
+  ],
+  "pattaniToThai": [
+    {
+      "id": "p2t-01",
+      "thai": "ไม่มี",
+      "pattani": "ตะเดาะ",
+      "source": "pairs.jsonl row 21"
+    },
+    {
+      "id": "p2t-02",
+      "thai": "มี",
+      "pattani": "อาดอ",
+      "source": "pairs.jsonl row 141"
+    },
+    {
+      "id": "p2t-03",
+      "thai": "ใช่",
+      "pattani": "ฮือ",
+      "source": "pairs.jsonl row 180"
+    },
+    {
+      "id": "p2t-04",
+      "thai": "ไม่",
+      "pattani": "เดาะ",
+      "source": "pairs.jsonl row 234"
+    },
+    {
+      "id": "p2t-05",
+      "thai": "เจ็บ",
+      "pattani": "ซาเกะ",
+      "source": "pairs.jsonl row 100"
+    },
+    {
+      "id": "p2t-06",
+      "thai": "รู้สึกเจ็บ",
+      "pattani": "วาซอซาเกะ",
+      "source": "pairs.jsonl row 94"
+    },
+    {
+      "id": "p2t-07",
+      "thai": "ไม่มีปวด",
+      "pattani": "ตะเดาะซาเกะ",
+      "source": "pairs.jsonl row 91"
+    },
+    {
+      "id": "p2t-08",
+      "thai": "มีบางครั้ง",
+      "pattani": "อาดอเกาะห์",
+      "source": "pairs.jsonl row 225"
+    },
+    {
+      "id": "p2t-09",
+      "thai": "เพิ่งเป็นเลย",
+      "pattani": "บารูยาดี",
+      "source": "pairs.jsonl row 237"
+    },
+    {
+      "id": "p2t-10",
+      "thai": "สัปดาห์นึงแล้ว",
+      "pattani": "ซือแมงูเดาะ",
+      "source": "pairs.jsonl row 133",
+      "confirm": true
+    },
+    {
+      "id": "p2t-11",
+      "thai": "หายแล้ว",
+      "pattani": "ฮีงอเดาะห์",
+      "source": "pairs.jsonl row 211"
+    },
+    {
+      "id": "p2t-12",
+      "thai": "ยังไม่รู้เลย",
+      "pattani": "เดาะตาฮูงาฆี",
+      "source": "pairs.jsonl row 280"
+    }
+  ]
+}

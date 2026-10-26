@@ -20,6 +20,7 @@ import VtuberBox from "./components/canvas/vtuber-box";
 import AppHeader from "./components/header/app-header";
 import SafetyStrip from "./components/safety/safety-strip";
 import ChatHistoryPanel from "./components/sidebar/chat-history-panel";
+import QuickPhrases from "./components/quick-phrases/quick-phrases";
 import TitleBar from "./components/electron/title-bar";
 import { InputSubtitle } from "./components/electron/input-subtitle";
 import { ProactiveSpeakProvider } from "./context/proactive-speak-context";
@@ -86,6 +87,7 @@ function AppContent(): JSX.Element {
           {!isPet && (
             <section className="yd-conversation" aria-label={t("conversation.label")}>
               <ChatHistoryPanel />
+              <QuickPhrases />
               <Footer />
             </section>
           )}

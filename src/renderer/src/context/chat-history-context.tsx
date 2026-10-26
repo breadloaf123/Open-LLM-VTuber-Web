@@ -15,6 +15,7 @@ interface ChatHistoryState {
   currentHistoryUid: string | null;
   appendHumanMessage: (content: string) => void;
   appendAIMessage: (content: string, name?: string, avatar?: string) => void;
+  appendPhrasebookTurn: (said: string, translation: string, direction: 'patient' | 'doctor', name?: string) => void;
   appendOrUpdateToolCallMessage: (toolMessageData: Partial<Message>) => void; // Accept partial data
   setMessages: (messages: Message[]) => void; // Use the unified Message type
   setHistoryList: (
@@ -84,8 +85,10 @@ export function ChatHistoryProvider({ children }: { children: React.ReactNode })
     setMessages((prevMessages) => {
       const lastMessage = prevMessages[prevMessages.length - 1];
 
-      // If forceNewMessage is true or last message is not an AI text message, create new message
-      if (forceNewMessage || !lastMessage || lastMessage.role !== 'ai' || lastMessage.type !== 'text') {
+      // If forceNewMessage is true or last message is not an AI text message, create new message.
+      // A phrase-bank card is never extended by a later reply.
+      if (forceNewMessage || !lastMessage || lastMessage.role !== 'ai' || lastMessage.type !== 'text'
+        || lastMessage.origin === 'phrasebook') {
         setForceNewMessage(false); // Reset the flag
         return [...prevMessages, {
           id: Date.now().toString(),
@@ -109,6 +112,33 @@ export function ChatHistoryProvider({ children }: { children: React.ReactNode })
       ];
     });
   }, [forceNewMessage, setForceNewMessage]);
+
+  /**
+   * Append a quick-phrase turn: what was said and its phrase-bank translation, as two
+   * messages tagged with their direction (they may differ from the active character's)
+   * @param said - The phrase in the speaker's language
+   * @param translation - The phrase-bank text spoken to the listener
+   * @param direction - "patient" for Pattani Malay to Thai, "doctor" for Thai to Pattani Malay
+   * @param name - Name shown on the translation card
+   */
+  const appendPhrasebookTurn = useCallback((
+    said: string,
+    translation: string,
+    direction: 'patient' | 'doctor',
+    name?: string,
+  ) => {
+    const now = Date.now();
+    const timestamp = new Date(now).toISOString();
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      {
+        id: `${now}-said`, content: said, role: 'human', type: 'text', timestamp, direction, origin: 'phrasebook',
+      },
+      {
+        id: `${now}-phrase`, content: translation, role: 'ai', type: 'text', timestamp, name, direction, origin: 'phrasebook',
+      },
+    ]);
+  }, []);
 
   /**
    * Append or update a Tool Call message using its tool_id
@@ -207,6 +237,7 @@ export function ChatHistoryProvider({ children }: { children: React.ReactNode })
       currentHistoryUid,
       appendHumanMessage,
       appendAIMessage,
+      appendPhrasebookTurn,
       appendOrUpdateToolCallMessage, // Add to context value
       setMessages,
       setHistoryList,
@@ -224,6 +255,7 @@ export function ChatHistoryProvider({ children }: { children: React.ReactNode })
       currentHistoryUid,
       appendHumanMessage,
       appendAIMessage,
+      appendPhrasebookTurn,
       appendOrUpdateToolCallMessage, // Add dependency
       updateHistoryList,
       fullResponse,

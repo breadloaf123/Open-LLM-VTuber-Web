@@ -40,6 +40,10 @@ export interface Message {
   tool_id?: string; // Specific to tool calls
   tool_name?: string; // Specific to tool calls
   status?: 'running' | 'completed' | 'error'; // Specific to tool calls
+
+  // Set on quick phrases, which are spoken from the phrase bank in either direction
+  direction?: 'patient' | 'doctor';
+  origin?: 'phrasebook';
 }
 
 export interface Actions {

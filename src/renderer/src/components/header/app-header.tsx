@@ -24,8 +24,7 @@ function StatusPill(): JSX.Element {
     return (
       <span className="yd-status" data-state="ready" role="status">
         <span className="yd-status__dot" aria-hidden="true" />
-        <span className="yd-desktop-only">{t('wsStatus.localReady')}</span>
-        <span className="yd-phone-only">{t('wsStatus.ready')}</span>
+        {t('wsStatus.ready')}
       </span>
     );
   }
@@ -47,7 +46,8 @@ function StatusPill(): JSX.Element {
 
 /** Top bar: logo, connection status, the active character, and the app's actions */
 function AppHeader(): JSX.Element {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const nextLanguage = i18n.resolvedLanguage === 'en' ? 'th' : 'en';
   const { confName } = useConfig();
   const {
     settingsOpen, onSettingsOpen, onSettingsClose, createNewHistory, setMode, currentMode, isElectron,
@@ -110,6 +110,18 @@ function AppHeader(): JSX.Element {
           onClick={createNewHistory}
         >
           <PiNotePencil aria-hidden />
+        </button>
+
+        {/* Thai / English: the button names the language it switches to */}
+        <button
+          type="button"
+          className="yd-icon-btn yd-lang-btn"
+          lang={nextLanguage}
+          aria-label={t('header.switchLanguage')}
+          title={t('header.switchLanguage')}
+          onClick={() => i18n.changeLanguage(nextLanguage)}
+        >
+          {t('header.switchLanguageShort')}
         </button>
 
         <button
