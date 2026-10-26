@@ -16,6 +16,8 @@ import { useFooter } from '@/hooks/footer/use-footer';
 interface FooterProps {
   isCollapsed?: boolean
   onToggle?: () => void
+  /** Phone layout: no collapse handle and a shorter input */
+  compact?: boolean
 }
 
 interface ToggleButtonProps {
@@ -35,6 +37,7 @@ interface MessageInputProps {
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
   onCompositionStart: () => void
   onCompositionEnd: () => void
+  compact?: boolean
 }
 
 // Reusable components
@@ -81,6 +84,7 @@ const MessageInput = memo(({
   onKeyDown,
   onCompositionStart,
   onCompositionEnd,
+  compact = false,
 }: MessageInputProps) => {
   const { t } = useTranslation();
 
@@ -102,6 +106,7 @@ const MessageInput = memo(({
           onCompositionEnd={onCompositionEnd}
           placeholder={t('footer.typeYourMessage')}
           {...footerStyles.footer.input}
+          {...(compact && footerStyles.footer.compactInput)}
         />
       </Box>
     </InputGroup>
@@ -111,7 +116,7 @@ const MessageInput = memo(({
 MessageInput.displayName = 'MessageInput';
 
 // Main component
-function Footer({ isCollapsed = false, onToggle }: FooterProps): JSX.Element {
+function Footer({ isCollapsed = false, onToggle, compact = false }: FooterProps): JSX.Element {
   const {
     inputValue,
     handleInputChange,
@@ -124,11 +129,14 @@ function Footer({ isCollapsed = false, onToggle }: FooterProps): JSX.Element {
   } = useFooter();
 
   return (
-    <Box {...footerStyles.footer.container(isCollapsed)}>
-      <ToggleButton isCollapsed={isCollapsed} onToggle={onToggle} />
+    <Box
+      {...footerStyles.footer.container(isCollapsed && !compact)}
+      {...(compact && footerStyles.footer.compactContainer)}
+    >
+      {!compact && <ToggleButton isCollapsed={isCollapsed} onToggle={onToggle} />}
 
-      <Box pt="0" px="4">
-        <HStack width="100%" gap={4}>
+      <Box pt="0" px={compact ? '3' : '4'}>
+        <HStack width="100%" gap={compact ? 3 : 4}>
           <Box>
             <Box mb="1.5">
               <AIStateIndicator />
@@ -146,6 +154,7 @@ function Footer({ isCollapsed = false, onToggle }: FooterProps): JSX.Element {
             onKeyDown={handleKeyPress}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
+            compact={compact}
           />
         </HStack>
       </Box>

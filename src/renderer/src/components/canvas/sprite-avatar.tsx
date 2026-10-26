@@ -43,11 +43,18 @@ function mouthFrame(level: number, shape: number): number {
   return FRAME.wide;
 }
 
+interface SpriteAvatarProps {
+  /** Share of the stage height kept clear at the bottom, for a footer that overlays it */
+  bottomInset?: number
+  /** Size against the stage height; overrides the model's kScale (the phone stage is short) */
+  fitScale?: number
+}
+
 /**
  * A VTuber drawn from picture frames instead of a Live2D model. Used when the
  * character's model_dict entry has `avatarType: "sprite"`.
  */
-export const SpriteAvatar = memo((): JSX.Element => {
+export const SpriteAvatar = memo(({ bottomInset = 0.12, fitScale }: SpriteAvatarProps): JSX.Element => {
   const { modelInfo } = useLive2DConfig();
   const { aiState } = useAiState();
   const { mode } = useMode();
@@ -130,10 +137,10 @@ export const SpriteAvatar = memo((): JSX.Element => {
   };
 
   const talk = modelInfo?.sprite?.talk;
-  const scale = Math.min(1.15, Math.max(0.4, Number(modelInfo?.kScale) || 1));
+  const scale = fitScale ?? Math.min(1.15, Math.max(0.4, Number(modelInfo?.kScale) || 1));
   const isPet = mode === 'pet';
   // Leave the bottom of the stage for the footer, which overlays it in window mode
-  const bottom = isPet ? 0 : box.height * 0.12;
+  const bottom = isPet ? 0 : box.height * bottomInset;
   const side = Math.min((box.height - bottom) * 0.86 * scale, box.width);
 
   return (

@@ -43,7 +43,10 @@ const Background = memo(({ children }: { children?: React.ReactNode }) => {
         <Image
           {...canvasStyles.background.image}
           src={backgroundUrl}
-          alt="background"
+          alt=""
+          // A missing background file should leave the plain stage, not a broken-image icon
+          onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
+          onLoad={(e) => { e.currentTarget.style.visibility = 'visible'; }}
         />
       )}
       {children}

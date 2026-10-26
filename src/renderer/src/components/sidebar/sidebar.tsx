@@ -17,6 +17,8 @@ import { ModeType } from '@/context/mode-context';
 interface SidebarProps {
   isCollapsed?: boolean
   onToggle: () => void
+  /** "sheet": full-width chat under the VTuber on phones, without the collapse handle or camera tabs */
+  variant?: 'panel' | 'sheet'
 }
 
 interface HeaderButtonsProps {
@@ -110,13 +112,14 @@ const HeaderButtons = memo(({ onSettingsOpen, onNewHistory, setMode, currentMode
 
 HeaderButtons.displayName = 'HeaderButtons';
 
-const SidebarContent = memo(({ 
-  onSettingsOpen, 
-  onNewHistory, 
-  setMode, 
+const SidebarContent = memo(({
+  onSettingsOpen,
+  onNewHistory,
+  setMode,
   currentMode,
-  isElectron
-}: HeaderButtonsProps) => (
+  isElectron,
+  showBottomTab = true,
+}: HeaderButtonsProps & { showBottomTab?: boolean }) => (
   <Box {...sidebarStyles.sidebar.content}>
     <Box {...sidebarStyles.sidebar.header}>
       <HeaderButtons
@@ -128,14 +131,14 @@ const SidebarContent = memo(({
       />
     </Box>
     <ChatHistoryPanel />
-    <BottomTab />
+    {showBottomTab && <BottomTab />}
   </Box>
 ));
 
 SidebarContent.displayName = 'SidebarContent';
 
 // Main component
-function Sidebar({ isCollapsed = false, onToggle }: SidebarProps): JSX.Element {
+function Sidebar({ isCollapsed = false, onToggle, variant = 'panel' }: SidebarProps): JSX.Element {
   const {
     settingsOpen,
     onSettingsOpen,
@@ -146,17 +149,24 @@ function Sidebar({ isCollapsed = false, onToggle }: SidebarProps): JSX.Element {
     isElectron,
   } = useSidebar();
 
-  return (
-    <Box {...sidebarStyles.sidebar.container(isCollapsed)}>
-      <ToggleButton isCollapsed={isCollapsed} onToggle={onToggle} />
+  const isSheet = variant === 'sheet';
 
-      {!isCollapsed && !settingsOpen && (
+  return (
+    <Box
+      {...sidebarStyles.sidebar.container(isCollapsed && !isSheet)}
+      {...(isSheet && sidebarStyles.sidebar.sheet)}
+      className={isSheet ? 'chat-sheet' : undefined}
+    >
+      {!isSheet && <ToggleButton isCollapsed={isCollapsed} onToggle={onToggle} />}
+
+      {(isSheet || !isCollapsed) && !settingsOpen && (
         <SidebarContent
           onSettingsOpen={onSettingsOpen}
           onNewHistory={createNewHistory}
           setMode={setMode}
           currentMode={currentMode}
           isElectron={isElectron}
+          showBottomTab={!isSheet}
         />
       )}
 

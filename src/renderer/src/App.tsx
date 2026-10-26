@@ -1,6 +1,6 @@
 /* eslint-disable no-shadow */
 // import { StrictMode } from 'react';
-import { Box, Flex, ChakraProvider, defaultSystem } from "@chakra-ui/react";
+import { Box, BoxProps, Flex, ChakraProvider, defaultSystem } from "@chakra-ui/react";
 import { useState, useEffect, useRef } from "react";
 // import Canvas from './components/canvas/canvas'; // Likely unused now
 import Sidebar from "./components/sidebar/sidebar";
@@ -30,6 +30,10 @@ import Background from "./components/canvas/background";
 import WebSocketStatus from "./components/canvas/ws-status";
 import Subtitle from "./components/canvas/subtitle";
 import { ModeProvider, useMode } from "./context/mode-context";
+import { useIsPhone } from "./hooks/utils/use-is-phone";
+
+/** Phone layout: the VTuber stage takes the top of the screen, the chat the rest */
+const PHONE_STAGE_HEIGHT = "calc(var(--vh, 1vh) * 40)";
 
 function AppContent(): JSX.Element {
   const [showSidebar, setShowSidebar] = useState(true);
@@ -37,6 +41,8 @@ function AppContent(): JSX.Element {
   const { mode } = useMode();
   const { modelInfo } = useLive2DConfig();
   const isSpriteAvatar = modelInfo?.avatarType === "sprite";
+  const isPhone = useIsPhone();
+  const isPhoneLayout = mode === "window" && isPhone;
   const isElectron = window.api !== undefined;
   const live2dContainerRef = useRef<HTMLDivElement>(null);
 
@@ -94,21 +100,63 @@ function AppContent(): JSX.Element {
     zIndex: 15, // Higher zIndex for pet mode overlay
   };
 
+  // Phone layout: the VTuber sits in the stage band at the top
+  const live2dPhoneStyle = {
+    ...live2dBaseStyle,
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: PHONE_STAGE_HEIGHT,
+    zIndex: 5,
+  };
+
+  let live2dStyle: BoxProps = live2dPetStyle;
+  if (isPhoneLayout) live2dStyle = live2dPhoneStyle;
+  else if (mode === "window") live2dStyle = getResponsiveLive2DWindowStyle(showSidebar);
+
   return (
     <>
-      <Box
-        ref={live2dContainerRef}
-        // Apply styles conditionally based on mode
-        // Use the function to get dynamic responsive styles for window mode
-        {...(mode === "window"
-          ? getResponsiveLive2DWindowStyle(showSidebar)
-          : live2dPetStyle)}
-      >
-        {isSpriteAvatar ? <SpriteAvatar /> : <Live2D />}
+      <Box ref={live2dContainerRef} {...live2dStyle}>
+        {isSpriteAvatar ? (
+          <SpriteAvatar {...(isPhoneLayout && { bottomInset: 0, fitScale: 1 })} />
+        ) : (
+          <Live2D />
+        )}
       </Box>
 
+      {/* Phone: stage on top, chat in the middle, input at the bottom.
+          No subtitle overlay: the chat right under the stage shows the same text. */}
+      {isPhoneLayout && (
+        <Flex
+          direction="column"
+          width="100vw"
+          height="calc(var(--vh, 1vh) * 100)"
+          bg="gray.900"
+          color="white"
+          overflow="hidden"
+        >
+          <Box position="relative" height={PHONE_STAGE_HEIGHT} flexShrink={0}>
+            <Background />
+            <Box
+              position="absolute"
+              top="max(12px, env(safe-area-inset-top, 0px))"
+              left="12px"
+              zIndex={10}
+            >
+              <WebSocketStatus />
+            </Box>
+          </Box>
+          <Box flex={1} minH={0} position="relative">
+            <Sidebar variant="sheet" onToggle={() => {}} />
+          </Box>
+          <Box flexShrink={0} zIndex={10}>
+            <Footer compact />
+          </Box>
+        </Flex>
+      )}
+
       {/* Conditional Rendering of Window UI */}
-      {mode === "window" && (
+      {mode === "window" && !isPhone && (
         <>
           {isElectron && <TitleBar />}
           {/* Apply styles by spreading */}
