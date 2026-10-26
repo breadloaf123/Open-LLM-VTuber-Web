@@ -126,11 +126,47 @@
     "interrupted": "已打断",
     "loading": "加载中",
     "listening": "聆听中",
-    "waiting": "等待中"
+    "waiting": "等待中",
+    "speaking": "说话中"
   },
   "wsStatus": {
     "connected": "已连接",
     "connecting": "连接中",
-    "clickToReconnect": "点击重新连接"
+    "clickToReconnect": "点击重新连接",
+    "localReady": "本地 AI 就绪",
+    "ready": "就绪",
+    "offline": "离线 · 点击重新连接"
+  },
+  "header": {
+    "settings": "设置",
+    "history": "对话历史",
+    "newConversation": "新对话",
+    "group": "群组",
+    "mode": "显示模式"
+  },
+  "conversation": {
+    "label": "对话",
+    "patientSpeech": "患者 · 北大年马来语",
+    "doctorSpeech": "医生 · 泰语",
+    "you": "您",
+    "toThai": "泰语译文",
+    "toPattani": "北大年马来语译文",
+    "emptyTitle": "暂无消息",
+    "emptyHint": "打开麦克风说话，或在下方输入句子。"
+  },
+  "composer": {
+    "micOn": "关闭麦克风",
+    "micOff": "打开麦克风",
+    "stop": "停止当前回复",
+    "send": "发送",
+    "inputLabel": "输入要翻译的句子"
+  },
+  "vtuber": {
+    "label": "翻译助手形象",
+    "shrink": "缩小形象",
+    "expand": "显示形象"
+  },
+  "safety": {
+    "notice": "仅为基础沟通原型，不得替代医学诊断。"
   }
 } 

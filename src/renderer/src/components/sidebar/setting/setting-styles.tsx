@@ -70,7 +70,8 @@ export const settingStyles = {
       borderColor: 'whiteAlpha.200',
     },
     drawerContent: {
-      bg: 'gray.900',
+      bg: 'var(--yd-drawer-bg)',
+      fontFamily: 'var(--yd-font)',
       maxWidth: '440px',
       height: isElectron ? 'calc(100vh - 30px)' : '100vh',
       borderLeft: '1px solid',

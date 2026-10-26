@@ -11,6 +11,7 @@ import { SubtitleContext } from './subtitle-context';
 import { AiStateContext, AiState } from './ai-state-context';
 import { useLocalStorage } from '@/hooks/utils/use-local-storage';
 import { toaster } from '@/components/ui/toaster';
+import { useAvatarActivity } from '@/utils/avatar-activity';
 
 /**
  * VAD settings configuration interface
@@ -220,6 +221,8 @@ export function VADProvider({ children }: { children: React.ReactNode }) {
    * Handle frame processing event
    */
   const handleFrameProcessed = useCallback((probs: { isSpeech: number }) => {
+    // Drives the voice indicator while listening
+    useAvatarActivity.getState().setVoiceLevel(probs.isSpeech);
     if (probs.isSpeech > previousTriggeredProbabilityRef.current) {
       setPreviousTriggeredProbability(probs.isSpeech);
     }
@@ -333,6 +336,7 @@ export function VADProvider({ children }: { children: React.ReactNode }) {
       console.log('VAD instance not found');
     }
     setMicOn(false);
+    useAvatarActivity.getState().setVoiceLevel(0);
     isProcessingRef.current = false;
   }, []);
 

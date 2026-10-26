@@ -49,15 +49,6 @@ export const sidebarStyles = {
       overflow: isCollapsed ? 'visible' : 'hidden',
       pb: '4',
     }),
-    // Phone layout: the chat fills the width under the VTuber instead of a side panel
-    sheet: {
-      position: 'relative' as const,
-      width: '100%',
-      gap: 1,
-      pb: 0,
-      borderTop: '1px solid',
-      borderColor: 'whiteAlpha.200',
-    },
     toggleButton: {
       position: 'absolute',
       right: 0,
@@ -227,7 +218,8 @@ export const sidebarStyles = {
     },
     drawer: {
       content: {
-        background: 'var(--chakra-colors-gray-900)',
+        background: 'var(--yd-drawer-bg)',
+        color: 'white',
         maxWidth: '440px',
         marginTop: isElectron ? '30px' : '0',
         height: isElectron ? 'calc(100vh - 30px)' : '100vh',
@@ -530,15 +522,6 @@ export const chatPanelStyles = css`
     background: transparent !important;
     width: calc(100% - 24px) !important;
     margin-left: 0 !important;
-  }
-
-  /* The phone chat sheet has no collapse handle to leave room for */
-  .chat-sheet .cs-main-container {
-    width: 100% !important;
-  }
-
-  .chat-sheet .cs-message-list {
-    padding: var(--chakra-space-2);
   }
 
   .cs-message__sender {

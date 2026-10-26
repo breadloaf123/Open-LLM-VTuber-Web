@@ -1,126 +1,25 @@
-/* eslint-disable react/require-default-props */
-import {
-  Box, Textarea, IconButton, HStack,
-} from '@chakra-ui/react';
-import { BsMicFill, BsMicMuteFill, BsPaperclip } from 'react-icons/bs';
-import { IoHandRightSharp } from 'react-icons/io5';
-import { FiChevronDown } from 'react-icons/fi';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { InputGroup } from '@/components/ui/input-group';
-import { footerStyles } from './footer-styles';
-import AIStateIndicator from './ai-state-indicator';
+import {
+  PiMicrophoneFill, PiMicrophoneSlash, PiHandPalm, PiPaperPlaneRightFill,
+} from 'react-icons/pi';
 import { useFooter } from '@/hooks/footer/use-footer';
+import { useAiState } from '@/context/ai-state-context';
+import { useVoiceState } from '@/hooks/utils/use-voice-state';
+import { VoiceVisualizer } from './voice-visualizer';
 
-// Type definitions
-interface FooterProps {
-  isCollapsed?: boolean
-  onToggle?: () => void
-  /** Phone layout: no collapse handle and a shorter input */
-  compact?: boolean
-}
-
-interface ToggleButtonProps {
-  isCollapsed: boolean
-  onToggle?: () => void
-}
-
-interface ActionButtonsProps {
-  micOn: boolean
-  onMicToggle: () => void
-  onInterrupt: () => void
-}
-
-interface MessageInputProps {
-  value: string
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-  onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
-  onCompositionStart: () => void
-  onCompositionEnd: () => void
-  compact?: boolean
-}
-
-// Reusable components
-const ToggleButton = memo(({ isCollapsed, onToggle }: ToggleButtonProps) => (
-  <Box
-    {...footerStyles.footer.toggleButton}
-    onClick={onToggle}
-    color="whiteAlpha.500"
-    style={{
-      transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)',
-    }}
-  >
-    <FiChevronDown />
-  </Box>
-));
-
-ToggleButton.displayName = 'ToggleButton';
-
-const ActionButtons = memo(({ micOn, onMicToggle, onInterrupt }: ActionButtonsProps) => (
-  <HStack gap={2}>
-    <IconButton
-      bg={micOn ? 'green.500' : 'red.500'}
-      {...footerStyles.footer.actionButton}
-      onClick={onMicToggle}
-    >
-      {micOn ? <BsMicFill /> : <BsMicMuteFill />}
-    </IconButton>
-    <IconButton
-      aria-label="Raise hand"
-      bg="yellow.500"
-      {...footerStyles.footer.actionButton}
-      onClick={onInterrupt}
-    >
-      <IoHandRightSharp size="24" />
-    </IconButton>
-  </HStack>
-));
-
-ActionButtons.displayName = 'ActionButtons';
-
-const MessageInput = memo(({
-  value,
-  onChange,
-  onKeyDown,
-  onCompositionStart,
-  onCompositionEnd,
-  compact = false,
-}: MessageInputProps) => {
+/**
+ * The composer under the conversation: voice status, microphone, stop, and text input.
+ */
+function Footer(): JSX.Element {
   const { t } = useTranslation();
-
-  return (
-    <InputGroup flex={1}>
-      <Box position="relative" width="100%">
-        <IconButton
-          aria-label="Attach file"
-          variant="ghost"
-          {...footerStyles.footer.attachButton}
-        >
-          <BsPaperclip size="24" />
-        </IconButton>
-        <Textarea
-          value={value}
-          onChange={onChange}
-          onKeyDown={onKeyDown}
-          onCompositionStart={onCompositionStart}
-          onCompositionEnd={onCompositionEnd}
-          placeholder={t('footer.typeYourMessage')}
-          {...footerStyles.footer.input}
-          {...(compact && footerStyles.footer.compactInput)}
-        />
-      </Box>
-    </InputGroup>
-  );
-});
-
-MessageInput.displayName = 'MessageInput';
-
-// Main component
-function Footer({ isCollapsed = false, onToggle, compact = false }: FooterProps): JSX.Element {
+  const { aiState } = useAiState();
+  const voiceState = useVoiceState();
   const {
     inputValue,
     handleInputChange,
     handleKeyPress,
+    handleSend,
     handleCompositionStart,
     handleCompositionEnd,
     handleInterrupt,
@@ -128,38 +27,66 @@ function Footer({ isCollapsed = false, onToggle, compact = false }: FooterProps)
     micOn,
   } = useFooter();
 
+  const statusLabel = voiceState === 'speaking' ? t('aiState.speaking') : t(`aiState.${aiState}`);
+  const micLabel = t(micOn ? 'composer.micOn' : 'composer.micOff');
+
   return (
-    <Box
-      {...footerStyles.footer.container(isCollapsed && !compact)}
-      {...(compact && footerStyles.footer.compactContainer)}
-    >
-      {!compact && <ToggleButton isCollapsed={isCollapsed} onToggle={onToggle} />}
+    <div className="yd-composer">
+      <div className="yd-composer__status">
+        <VoiceVisualizer state={voiceState} />
+        <span>{statusLabel}</span>
+      </div>
 
-      <Box pt="0" px={compact ? '3' : '4'}>
-        <HStack width="100%" gap={compact ? 3 : 4}>
-          <Box>
-            <Box mb="1.5">
-              <AIStateIndicator />
-            </Box>
-            <ActionButtons
-              micOn={micOn}
-              onMicToggle={handleMicToggle}
-              onInterrupt={handleInterrupt}
-            />
-          </Box>
+      <div className="yd-composer__row">
+        <button
+          type="button"
+          className="yd-mic"
+          aria-pressed={micOn}
+          aria-label={micLabel}
+          title={micLabel}
+          data-hearing={voiceState === 'listening'}
+          onClick={handleMicToggle}
+        >
+          {micOn ? <PiMicrophoneFill aria-hidden /> : <PiMicrophoneSlash aria-hidden />}
+        </button>
 
-          <MessageInput
+        <button
+          type="button"
+          className="yd-stop"
+          aria-label={t('composer.stop')}
+          title={t('composer.stop')}
+          onClick={handleInterrupt}
+        >
+          <PiHandPalm aria-hidden />
+        </button>
+
+        <div className="yd-input-wrap">
+          <textarea
+            id="yd-message"
+            className="yd-input"
+            rows={1}
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleKeyPress}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={handleCompositionEnd}
-            compact={compact}
+            placeholder={t('footer.typeYourMessage')}
+            aria-label={t('composer.inputLabel')}
           />
-        </HStack>
-      </Box>
-    </Box>
+          <button
+            type="button"
+            className="yd-send"
+            aria-label={t('composer.send')}
+            title={t('composer.send')}
+            disabled={!inputValue.trim()}
+            onClick={handleSend}
+          >
+            <PiPaperPlaneRightFill aria-hidden />
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 
-export default Footer;
+export default memo(Footer);

@@ -1,5 +1,13 @@
 import { createRoot } from 'react-dom/client';
+// Brand fonts are bundled, not fetched, so the app keeps its look offline
+import '@fontsource/ibm-plex-sans-thai/400.css';
+import '@fontsource/ibm-plex-sans-thai/500.css';
+import '@fontsource/ibm-plex-sans-thai/600.css';
+import '@fontsource/ibm-plex-sans-thai/700.css';
+import '@fontsource/noto-naskh-arabic/400.css';
+import '@fontsource/noto-naskh-arabic/700.css';
 import './index.css';
+import './theme/yawidoc.css';
 import App from './App';
 import { LAppAdapter } from '../WebSDK/src/lappadapter';
 import './i18n';
@@ -27,6 +35,15 @@ console.error = (...args: any[]) => {
 };
 
 if (typeof window !== 'undefined') {
+  // Follow the device's light/dark setting. The `dark` class drives both the yawidoc
+  // tokens and Chakra's own dark tokens.
+  const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const applyColorScheme = () => {
+    document.documentElement.classList.toggle('dark', darkQuery.matches);
+  };
+  applyColorScheme();
+  darkQuery.addEventListener('change', applyColorScheme);
+
   (window as any).getLAppAdapter = () => LAppAdapter.getInstance();
 
   // Dynamically load the Live2D Core script

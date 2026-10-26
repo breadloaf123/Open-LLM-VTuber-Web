@@ -2,11 +2,9 @@ import { SystemStyleObject } from '@chakra-ui/react';
 
 interface FooterStyles {
   container: (isCollapsed: boolean) => SystemStyleObject
-  compactContainer: SystemStyleObject
   toggleButton: SystemStyleObject
   actionButton: SystemStyleObject
   input: SystemStyleObject
-  compactInput: SystemStyleObject
   attachButton: SystemStyleObject
 }
 
@@ -30,12 +28,6 @@ export const footerStyles: {
       overflow: isCollapsed ? 'visible' : 'hidden',
       pb: '4',
     }),
-    // Phone layout: sits below the chat, clear of the home indicator
-    compactContainer: {
-      borderTopRadius: 'none',
-      pt: '2',
-      pb: 'calc(8px + env(safe-area-inset-bottom, 0px))',
-    },
     toggleButton: {
       height: '24px',
       display: 'flex',
@@ -77,14 +69,6 @@ export const footerStyles: {
       alignItems: 'center',
       paddingTop: '28px',
       lineHeight: '1.4',
-    },
-    // Keeps 16px+ text so iOS does not zoom in on focus
-    compactInput: {
-      height: '72px',
-      minHeight: '72px',
-      maxHeight: '72px',
-      fontSize: '16px',
-      paddingTop: '24px',
     },
     attachButton: {
       position: 'absolute',

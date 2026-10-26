@@ -23,9 +23,9 @@ interface SubtitleState {
 /**
  * Default values and constants
  */
+// Empty until the server says something; the upstream joke greeting doesn't suit a clinic
 const DEFAULT_SUBTITLE = {
-  text: "Hi, I'm some random AI VTuber. Who the hell are ya? "
-        + 'Ahh, you must be amazed by my awesomeness, right? right?',
+  text: '',
 };
 
 /**

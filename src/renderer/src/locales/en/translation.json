@@ -67,7 +67,7 @@
     }
   },
   "footer": {
-    "typeYourMessage": "Type your message...",
+    "typeYourMessage": "Type a sentence…",
     "cameraControl": "Click to start camera",
     "cameraStopping": "Click to stop camera",
     "screenControl": "Click to start screen capture",
@@ -124,16 +124,52 @@
     "vadMisfire": "Voice detected but too brief. Try speaking louder/longer, or adjust settings (lower speech threshold, lower negative threshold, reduce redemption frames)."
   },
   "aiState": {
-    "idle": "idle",
-    "thinking-speaking": "thinking/speaking",
-    "interrupted": "interrupted",
-    "loading": "loading",
-    "listening": "listening",
-    "waiting": "waiting"
+    "idle": "Ready",
+    "thinking-speaking": "Translating…",
+    "interrupted": "Stopped",
+    "loading": "Loading…",
+    "listening": "Listening…",
+    "waiting": "Waiting…",
+    "speaking": "Speaking…"
   },
   "wsStatus": {
     "connected": "Connected",
     "connecting": "Connecting",
-    "clickToReconnect": "Click to Reconnect"
+    "clickToReconnect": "Click to Reconnect",
+    "localReady": "Local AI ready",
+    "ready": "Ready",
+    "offline": "Offline · tap to reconnect"
+  },
+  "header": {
+    "settings": "Settings",
+    "history": "Conversation history",
+    "newConversation": "New conversation",
+    "group": "Group",
+    "mode": "Display mode"
+  },
+  "conversation": {
+    "label": "Conversation",
+    "patientSpeech": "Patient · Pattani Malay",
+    "doctorSpeech": "Doctor · Thai",
+    "you": "You",
+    "toThai": "Thai translation",
+    "toPattani": "Pattani Malay translation",
+    "emptyTitle": "No messages yet",
+    "emptyHint": "Turn on the microphone and speak, or type a sentence below."
+  },
+  "composer": {
+    "micOn": "Turn microphone off",
+    "micOff": "Turn microphone on",
+    "stop": "Stop the current reply",
+    "send": "Send",
+    "inputLabel": "Type a sentence to translate"
+  },
+  "vtuber": {
+    "label": "Interpreter avatar",
+    "shrink": "Shrink the avatar",
+    "expand": "Show the avatar"
+  },
+  "safety": {
+    "notice": "Prototype for basic communication only. Must not replace a medical diagnosis."
   }
 } 
