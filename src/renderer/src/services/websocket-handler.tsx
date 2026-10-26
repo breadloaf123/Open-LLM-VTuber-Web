@@ -119,6 +119,16 @@ function WebSocketHandler({ children }: { children: React.ReactNode }) {
           // eslint-disable-next-line no-param-reassign
           message.model_info.url = modelUrl;
         }
+        // Sprite sheet paths are relative to the backend, like the model url
+        if (message.model_info?.sprite) {
+          const { sprite } = message.model_info;
+          (Object.keys(sprite) as (keyof typeof sprite)[]).forEach((key) => {
+            const value = sprite[key];
+            if (value && !value.startsWith("http")) {
+              sprite[key] = baseUrl + value;
+            }
+          });
+        }
 
         setAiState('idle');
         break;

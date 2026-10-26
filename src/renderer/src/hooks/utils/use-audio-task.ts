@@ -12,6 +12,8 @@ import { toaster } from '@/components/ui/toaster';
 import { useWebSocket } from '@/context/websocket-context';
 import { DisplayText } from '@/services/websocket-service';
 import { useLive2DExpression } from '@/hooks/canvas/use-live2d-expression';
+import { useLive2DConfig } from '@/context/live2d-config-context';
+import { useAvatarActivity } from '@/utils/avatar-activity';
 import * as LAppDefine from '../../../WebSDK/src/lappdefine';
 
 // Simple type alias for Live2D model
@@ -37,6 +39,8 @@ export const useAudioTask = () => {
   const { appendResponse, appendAIMessage } = useChatHistory();
   const { sendMessage } = useWebSocket();
   const { setExpression } = useLive2DExpression();
+  const { modelInfo } = useLive2DConfig();
+  const isSprite = modelInfo?.avatarType === 'sprite';
 
   // State refs to avoid stale closures
   const stateRef = useRef({
@@ -44,6 +48,7 @@ export const useAudioTask = () => {
     setSubtitleText,
     appendResponse,
     appendAIMessage,
+    isSprite,
   });
 
   // Note: currentAudioRef and currentModelRef are now managed by the global audioManager
@@ -53,6 +58,7 @@ export const useAudioTask = () => {
     setSubtitleText,
     appendResponse,
     appendAIMessage,
+    isSprite,
   };
 
   /**
@@ -60,7 +66,64 @@ export const useAudioTask = () => {
    */
   const stopCurrentAudioAndLipSync = useCallback(() => {
     audioManager.stopCurrentAudioAndLipSync();
+    useAvatarActivity.getState().setMouthLevel(0);
+    useAvatarActivity.getState().setSpeaking(false);
   }, []);
+
+  /**
+   * Play audio for a sprite avatar. There is no Live2D lip-sync engine, so the mouth
+   * follows the volume slices the backend sends with every clip.
+   */
+  const playWithSpriteLipSync = (
+    audioDataUrl: string,
+    volumes: number[],
+    sliceLength: number,
+    done: () => void,
+  ) => {
+    const { setSpeaking, setMouthLevel } = useAvatarActivity.getState();
+    const audio = new Audio(audioDataUrl);
+    audioManager.setCurrentAudio(audio, null);
+    let frame = 0;
+    let finished = false;
+
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      cancelAnimationFrame(frame);
+      setMouthLevel(0);
+      setSpeaking(false);
+      audioManager.clearCurrentAudio(audio);
+      done();
+    };
+
+    const tick = () => {
+      if (audio.paused || audio.ended) {
+        setMouthLevel(0);
+        return;
+      }
+      const index = sliceLength > 0 ? Math.floor((audio.currentTime * 1000) / sliceLength) : -1;
+      setMouthLevel(Math.min(1, volumes[index] ?? 0));
+      frame = requestAnimationFrame(tick);
+    };
+
+    audio.addEventListener('canplaythrough', () => {
+      if (stateRef.current.aiState === 'interrupted' || !audioManager.hasCurrentAudio()) {
+        finish();
+        return;
+      }
+      setSpeaking(true);
+      audio.play()
+        .then(() => { frame = requestAnimationFrame(tick); })
+        .catch((err) => {
+          console.error('Audio play error:', err);
+          finish();
+        });
+    }, { once: true });
+    audio.addEventListener('ended', finish);
+    // Interruption clears the source, which fires 'error'
+    audio.addEventListener('error', finish);
+    audio.load();
+  };
 
   /**
    * Handle audio playback with Live2D lip sync
@@ -99,6 +162,16 @@ export const useAudioTask = () => {
     }
 
     try {
+      if (audioBase64 && stateRef.current.isSprite) {
+        playWithSpriteLipSync(
+          `data:audio/wav;base64,${audioBase64}`,
+          options.volumes,
+          options.sliceLength,
+          resolve,
+        );
+        return;
+      }
+
       // Process audio if available
       if (audioBase64) {
         const audioDataUrl = `data:audio/wav;base64,${audioBase64}`;
@@ -155,6 +228,7 @@ export const useAudioTask = () => {
 
         const cleanup = () => {
           audioManager.clearCurrentAudio(audio);
+          useAvatarActivity.getState().setSpeaking(false);
           if (!isFinished) {
             isFinished = true;
             resolve();
@@ -173,6 +247,7 @@ export const useAudioTask = () => {
           }
 
           console.log('Starting audio playback with lip sync');
+          useAvatarActivity.getState().setSpeaking(true);
           audio.play().catch((err) => {
             console.error("Audio play error:", err);
             cleanup();

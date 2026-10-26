@@ -16,6 +16,10 @@ import { useConfig } from '@/context/character-config-context';
 import { useWebSocket } from '@/context/websocket-context';
 import { FaTools, FaCheck, FaTimes } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { useLive2DConfig } from '@/context/live2d-config-context';
+import { useAiState } from '@/context/ai-state-context';
+import { useAvatarActivity } from '@/utils/avatar-activity';
+import { ChatMascot, ChatMascotState } from './chat-mascot';
 
 // Main component
 function ChatHistoryPanel(): JSX.Element {
@@ -25,11 +29,25 @@ function ChatHistoryPanel(): JSX.Element {
   const { baseUrl } = useWebSocket();
   const userName = "Me";
 
+  const { modelInfo } = useLive2DConfig();
+  const { aiState } = useAiState();
+  const speaking = useAvatarActivity((s) => s.speaking);
+
   const validMessages = messages.filter((msg) => msg.content || // Keep messages with content
      (msg.type === 'tool_call_status' && msg.status === 'running') || // Keep running tools
      (msg.type === 'tool_call_status' && msg.status === 'completed') || // Keep completed tools
      (msg.type === 'tool_call_status' && msg.status === 'error'), // Keep error tools
   );
+
+  // Chat avatar from the character's sprite sheets; only the newest bot message's one moves
+  const chatSheets = modelInfo?.sprite?.chatDirections && modelInfo.sprite.chatReactions
+    ? { directions: modelInfo.sprite.chatDirections, reactions: modelInfo.sprite.chatReactions }
+    : null;
+  const lastAiId = [...validMessages].reverse().find((msg) => msg.role === 'ai' && msg.type !== 'tool_call_status')?.id;
+  let mascotState: ChatMascotState = 'idle';
+  if (speaking) mascotState = 'speaking';
+  else if (aiState === 'thinking-speaking') mascotState = 'thinking';
+  else if (aiState === 'listening' || aiState === 'waiting') mascotState = 'listening';
 
   return (
     <Box
@@ -113,7 +131,15 @@ function ChatHistoryPanel(): JSX.Element {
                   >
                     <ChatAvatar>
                       {msg.role === 'ai' ? (
-                        msg.avatar ? (
+                        chatSheets ? (
+                          <ChatMascot
+                            directions={chatSheets.directions}
+                            reactions={chatSheets.reactions}
+                            live={msg.id === lastAiId}
+                            state={mascotState}
+                            label={msg.name || confName || 'AI'}
+                          />
+                        ) : msg.avatar ? (
                           <img
                             src={`${baseUrl}/avatars/${msg.avatar}`}
                             alt="avatar"

@@ -29,6 +29,24 @@ export interface TapMotionMap {
 }
 
 /**
+ * Sprite avatar configuration: picture sheets used instead of a Live2D model
+ * @interface SpriteConfig
+ */
+export interface SpriteConfig {
+  /** 3x3 sheet of VTuber frames: closed, slightly open, aah, ooh, wide, half blink, blink, listening, happy */
+  talk: string;
+
+  /** Optional 3x3 sheet of mood frames (not used yet) */
+  moods?: string;
+
+  /** page-mascot head-direction sheet for the chat avatar */
+  chatDirections?: string;
+
+  /** page-mascot expressions sheet for the chat avatar */
+  chatReactions?: string;
+}
+
+/**
  * Live2D model information interface
  * @interface ModelInfo
  */
@@ -71,6 +89,12 @@ export interface ModelInfo {
 
   /** Initial scale */
   initialScale?: number;
+
+  /** Avatar renderer: a Live2D model (default) or picture sheets */
+  avatarType?: 'live2d' | 'sprite';
+
+  /** Picture sheets, used when avatarType is 'sprite' */
+  sprite?: SpriteConfig;
 }
 
 /**

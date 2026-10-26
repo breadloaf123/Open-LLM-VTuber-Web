@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import Sidebar from "./components/sidebar/sidebar";
 import Footer from "./components/footer/footer";
 import { AiStateProvider } from "./context/ai-state-context";
-import { Live2DConfigProvider } from "./context/live2d-config-context";
+import { Live2DConfigProvider, useLive2DConfig } from "./context/live2d-config-context";
 import { SubtitleProvider } from "./context/subtitle-context";
 import { BgUrlProvider } from "./context/bgurl-context";
 import { layoutStyles } from "./layout";
@@ -17,6 +17,7 @@ import { CharacterConfigProvider } from "./context/character-config-context";
 import { Toaster } from "./components/ui/toaster";
 import { VADProvider } from "./context/vad-context";
 import { Live2D } from "./components/canvas/live2d";
+import { SpriteAvatar } from "./components/canvas/sprite-avatar";
 import TitleBar from "./components/electron/title-bar";
 import { InputSubtitle } from "./components/electron/input-subtitle";
 import { ProactiveSpeakProvider } from "./context/proactive-speak-context";
@@ -34,6 +35,8 @@ function AppContent(): JSX.Element {
   const [showSidebar, setShowSidebar] = useState(true);
   const [isFooterCollapsed, setIsFooterCollapsed] = useState(false);
   const { mode } = useMode();
+  const { modelInfo } = useLive2DConfig();
+  const isSpriteAvatar = modelInfo?.avatarType === "sprite";
   const isElectron = window.api !== undefined;
   const live2dContainerRef = useRef<HTMLDivElement>(null);
 
@@ -101,7 +104,7 @@ function AppContent(): JSX.Element {
           ? getResponsiveLive2DWindowStyle(showSidebar)
           : live2dPetStyle)}
       >
-        <Live2D />
+        {isSpriteAvatar ? <SpriteAvatar /> : <Live2D />}
       </Box>
 
       {/* Conditional Rendering of Window UI */}
